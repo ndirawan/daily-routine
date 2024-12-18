@@ -1,12 +1,15 @@
 package com.ndirawan.daily.ui.screen.detailTodo.view
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ndirawan.daily.model.Todos
+import com.ndirawan.daily.ui.component.SpacerOne
 import com.ndirawan.daily.ui.screen.detailTodo.viewModel.TodosViewModel
 
 @Composable
@@ -31,23 +34,40 @@ fun Content(vm: TodosViewModel){
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(modifier =
+        Box(modifier =
             Modifier
                 .fillMaxWidth()
                 .padding(5.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            contentAlignment = Alignment.Center
         ) {
-            if (isLoading) {
-                CircularProgressIndicator()
-            } else if (error != null) {
-                Text(error)
-            } else {
-                Text(todos.title ?: "Empty")
-                Text(todos.userId.toString())
-                Text(todos.id.toString())
-                Text(todos.completed.toString())
+            Detail(todos)
+            when {
+                isLoading -> {
+                    CircularProgressIndicator()
+                }
+                error != null -> {
+                    Text(error)
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun Detail(todos: Todos){
+    Card {
+        Column(modifier =
+            Modifier
+                .padding(5.dp)
+                .fillMaxWidth()
+        ) {
+            Text("Title : ${todos.title}")
+            SpacerOne()
+            Text("Id : ${todos.id}")
+            SpacerOne()
+            Text("User : ${todos.userId}")
+            SpacerOne()
+            Text("Completed : ${if (todos.completed == true) "yes" else "not"}")
         }
     }
 }
